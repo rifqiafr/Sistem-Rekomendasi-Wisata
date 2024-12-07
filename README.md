@@ -507,20 +507,21 @@ Grafik menunjukkan penurunan nilai RMSE pada data train dan validation seiring b
 
 Sebagai contoh, kami melakukan rekomendasi untuk seorang pengguna dengan `User_Id` terpilih.
 
-Rekomendasi berdasarkan Collaborative Filtering untuk User ID 235:
+Rekomendasi berdasarkan Collaborative Filtering untuk User ID 206:
 
-| No. | Place_Name                         | Category      | Rating | Description                                                                 |
-|-----|------------------------------------|---------------|--------|-----------------------------------------------------------------------------|
-| 1   | Bukit Bintang Yogyakarta           | Taman Hiburan | 4.5    | Bukit Bintang merupakan salah satu lokasi nong...                           |
-| 2   | NuArt Sculpture Park               | Taman Hiburan | 4.7    | NuArt Sculpture Park ini merupakan sebuah gall...                           |
-| 3   | Upside Down World Bandung          | Taman Hiburan | 4.0    | Upside Down World Bandung pertama kali dibuka ...                           |
-| 4   | Taman Lansia                       | Taman Hiburan | 4.4    | Berlibur santai di akhir pekan cocok dilakukan...                           |
-| 5   | Teras Cikapundung BBWS             | Taman Hiburan | 4.3    | Teras Cikapundung Bandung sebelumnya merupakan...                          |
-| 6   | Museum Barli                       | Budaya        | 4.4    | Museum Barli adalah sebuah museum yang terleta...                          |
-| 7   | Museum Pos Indonesia               | Budaya        | 4.5    | Museum Pos Indonesia telah ada sejak masa Hind...                          |
-| 8   | Ciwangun Indah Camp Official       | Cagar Alam    | 4.3    | Ciwangun Indah Camp atau CIC adalah sebuah tem...                          |
-| 9   | Peta Park                          | Taman Hiburan | 4.3    | Bandung seperti tidak henti menawarkan tempat ...                          |
-| 10  | Keraton Surabaya                   | Budaya        | 4.4    | Kawasan yang berjuluk Kampung Keraton ini terd...                           |
+| No  | Nama Tempat                         | Kategori      | Rating | Deskripsi                                                                                      |
+| --- | ------------------------------------ | ------------- | ------ | ------------------------------------------------------------------------------------------------ |
+| 1   | Pantai Baron                         | Bahari        | 4.4    | Pantai Baron adalah salah satu objek wisata terbaik di Yogyakarta dengan pesona pantai yang indah. |
+| 2   | Pintoe Langit Dahromo                | Cagar Alam    | 4.4    | Pintoe Langit Dahromo menawarkan pemandangan alam dari ketinggian yang spektakuler, cocok untuk fotografi. |
+| 3   | Stone Garden Citatah                 | Taman Hiburan | 4.4    | Stone Garden di Citatah, Bandung, menawarkan formasi batu unik dan spot foto yang populer.         |
+| 4   | Taman Lansia                          | Taman Hiburan | 4.4    | Taman Lansia adalah tempat santai yang nyaman, cocok untuk berlibur di akhir pekan.                |
+| 5   | Teras Cikapundung BBWS               | Taman Hiburan | 4.3    | Teras Cikapundung Bandung adalah taman yang indah dengan aliran sungai, cocok untuk piknik dan bersantai. |
+| 6   | Museum Barli                         | Budaya        | 4.4    | Museum Barli di Bandung didedikasikan untuk mengenang karya seni Barli Sasmitawinata.               |
+| 7   | Museum Pos Indonesia                 | Budaya        | 4.5    | Museum Pos Indonesia menyimpan koleksi sejarah pos dan telekomunikasi dari masa Hindia Belanda.     |
+| 8   | Curug Batu Templek                   | Cagar Alam    | 4.1    | Curug Batu Templek adalah air terjun yang terletak di Bandung, menawarkan pemandangan alam yang asri. |
+| 9   | Masjid Agung Trans Studio Bandung    | Tempat Ibadah | 4.8    | Masjid Agung Trans Studio Bandung adalah masjid megah di kompleks Trans Studio, juga sebagai ikon arsitektur. |
+| 10  | Curug Cilengkrang                    | Cagar Alam    | 4.0    | Curug Cilengkrang adalah air terjun di Bandung, cocok untuk menikmati keindahan alam dan suasana tenang. |
+
 
 
 **Kelebihan dan Kekurangan**
@@ -627,13 +628,13 @@ Precision sebesar **100.00%** menunjukkan bahwa 10 dari 10 rekomendasi yang dibe
 Performa model Collaborative Filtering dievaluasi pada data validasi dengan menghitung nilai **RMSE** dan **MAE**. Hasilnya adalah:
 
 ```
-Collaborative Filtering - RMSE: 0.3586
-Collaborative Filtering - MAE: 0.3106
+Collaborative Filtering - RMSE: 0.3581
+Collaborative Filtering - MAE: 0.3102
 ```
 
 **Interpretasi:**
-- Nilai RMSE sebesar **0.3586** menunjukkan bahwa rata-rata model memiliki performa yang cukup baik dalam memprediksi rating pengguna. Namun, masih terdapat ruang untuk meningkatkan akurasi prediksi melalui tuning hyperparameter dan/atau eksperimen dengan arsitektur model yang berbeda.
-- Nilai MAE sebesar **0.3106** juga menunjukkan tingkat akurasi yang baik dalam prediksi rating, meskipun terdapat ruang untuk peningkatan.
+- Nilai RMSE sebesar **0.3581** menunjukkan bahwa rata-rata model memiliki performa yang cukup baik dalam memprediksi rating pengguna. Namun, masih terdapat ruang untuk meningkatkan akurasi prediksi melalui tuning hyperparameter dan/atau eksperimen dengan arsitektur model yang berbeda.
+- Nilai MAE sebesar **0.3102** juga menunjukkan tingkat akurasi yang baik dalam prediksi rating, meskipun terdapat ruang untuk peningkatan.
 
 ### 3. Visualisasi Hasil Evaluasi
 
@@ -650,7 +651,7 @@ Hasil evaluasi terhadap dua model rekomendasi, yaitu **Content-based Filtering**
 
 Model **Content-based Filtering** berhasil memberikan rekomendasi yang sangat relevan untuk data **Museum Fatahillah**, dengan tingkat **Precision** mencapai **100.00%**. Ini menunjukkan bahwa sebagian besar rekomendasi yang diberikan sesuai dengan preferensi pengguna berdasarkan konten deskripsi dan kategori destinasi wisata. Dengan demikian, masalah pertama mengenai penyediaan rekomendasi yang relevan berdasarkan konten deskripsi dan kategori telah teratasi dengan baik. Model ini efektif memanfaatkan informasi tekstual untuk menemukan kesamaan antar destinasi, sehingga mampu memberikan rekomendasi yang tepat sasaran.
 
-Sementara itu, model **Collaborative Filtering** menunjukkan kinerja yang cukup memadai, dengan nilai **RMSE** sebesar **0.3586** dan **MAE** sebesar **0.3106**. Walaupun hasilnya cukup baik, masih ada ruang untuk perbaikan agar model ini lebih mendekati prediksi yang sempurna. Namun, model ini berhasil menangkap pola preferensi pengguna berdasarkan data rating yang diberikan, yang menyelesaikan masalah kedua terkait pemanfaatan data rating untuk meningkatkan akurasi rekomendasi. Dengan menganalisis pola interaksi pengguna, model ini dapat memberikan rekomendasi yang lebih personal dan relevan, meskipun masih perlu optimasi lebih lanjut untuk meningkatkan akurasinya.
+Sementara itu, model **Collaborative Filtering** menunjukkan kinerja yang cukup memadai, dengan nilai **RMSE** sebesar **0.3581** dan **MAE** sebesar **0.3102**. Walaupun hasilnya cukup baik, masih ada ruang untuk perbaikan agar model ini lebih mendekati prediksi yang sempurna. Namun, model ini berhasil menangkap pola preferensi pengguna berdasarkan data rating yang diberikan, yang menyelesaikan masalah kedua terkait pemanfaatan data rating untuk meningkatkan akurasi rekomendasi. Dengan menganalisis pola interaksi pengguna, model ini dapat memberikan rekomendasi yang lebih personal dan relevan, meskipun masih perlu optimasi lebih lanjut untuk meningkatkan akurasinya.
 
 Evaluasi menggunakan metrik **Precision**, **RMSE**, dan **MAE** memastikan bahwa sistem rekomendasi tidak hanya relevan, tetapi juga akurat dalam memenuhi kebutuhan pengguna. Precision menunjukkan bahwa rekomendasi dari model Content-based Filtering cukup relevan, sementara RMSE dan MAE pada model Collaborative Filtering mengindikasikan bahwa prediksi rating pengguna cukup akurat. Dengan demikian, sistem rekomendasi ini telah berhasil mengukur relevansi dan akurasi, serta memenuhi tujuan ketiga dalam mengukur performa sistem rekomendasi dengan metrik evaluasi yang sesuai.
 
