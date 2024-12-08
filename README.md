@@ -103,10 +103,13 @@ Proyek ini menggunakan dataset Indonesia Tourism Destination yang dapat diakses 
 - **Place_Id** pada dataset kedua berfungsi sebagai **foreign key** yang menghubungkan ke **Place_Id** pada dataset pertama (`tourism_with_id.csv`), memungkinkan integrasi data antara informasi destinasi wisata dan rating pengguna.
 - **User_Id** memungkinkan analisis perilaku pengguna secara individual serta pengelompokan pengguna berdasarkan preferensi mereka.
 
-# Data Preparation
-Pada tahap **data preparation**, dilakukan serangkaian langkah untuk memastikan bahwa data yang digunakan dalam proses pemodelan bersih, terstruktur, dan siap untuk dianalisis. Tahapan ini mencakup pembersihan data, penggabungan dataset, pengolahan teks, encoding variabel kategorikal, normalisasi rating, dan pembagian data menjadi set pelatihan dan pengujian. Berikut adalah uraian mendetail mengenai setiap langkah yang dilakukan:
-## Langkah-langkah yang Dilakukan:
-### 1. Nilai yang Hilang (Missing Values) pada Dataset
+## Penjelasan Kondisi Dataset: Missing Values dan Kolom yang Tidak Relevan
+
+Dalam tahap pemahaman data (data understanding), sangat penting untuk memeriksa kondisi dataset guna memahami potensi masalah yang dapat mempengaruhi analisis atau model selanjutnya. Berikut adalah penjelasan mengenai kondisi dataset terkait **missing values** (nilai yang hilang), serta **kolom yang tidak relevan** dalam dataset yang diberikan.
+
+## 1. **Missing Values (Nilai yang Hilang)**
+
+Missing values atau nilai yang hilang terjadi ketika suatu kolom dalam dataset tidak memiliki data pada beberapa entri. Dalam dataset yang diberikan, ada beberapa kolom yang mengandung missing values. Berikut adalah penjelasan lebih lanjut mengenai kolom-kolom tersebut:
 
 Dataset ini memiliki beberapa kolom yang mengandung nilai yang hilang. Berikut adalah tabel yang menunjukkan jumlah nilai yang hilang pada setiap kolom untuk dua dataset yang berbeda: `tourism_with_id` dan `tourism_rating`.
 
@@ -126,14 +129,46 @@ Dataset ini memiliki beberapa kolom yang mengandung nilai yang hilang. Berikut a
 | **Unnamed: 11** | 437               | -                |
 | **Unnamed: 12** | 0                 | -                |
 
-### Penjelasan:
-- Kolom dengan nilai **0** menunjukkan bahwa tidak ada nilai yang hilang (missing).
-- Kolom dengan nilai selain **0** menunjukkan jumlah nilai yang hilang dalam dataset.
-- Dataset `tourism_with_id` memiliki nilai hilang pada kolom **Time_Minutes** (232 nilai hilang) dan **Unnamed: 11** (437 nilai hilang), yang kemungkinan besar tidak relevan atau tidak memiliki data penting.
-- Dataset `tourism_rating` tidak memiliki nilai hilang di semua kolom.
+### **`tourism_with_id`**
+- **Kolom yang tidak memiliki nilai hilang (missing values):**
+  - **Place_Id**, **Place_Name**, **Description**, **Category**, **Rating**, **Lat**, dan **Long** tidak mengandung missing values, yang berarti data pada kolom-kolom ini lengkap dan dapat digunakan langsung dalam analisis tanpa penanganan khusus terkait missing values.
+
+- **Kolom dengan nilai hilang (missing values):**
+  - **Time_Minutes**: Terdapat 232 nilai hilang. Kolom ini berisi waktu yang diperlukan untuk mengunjungi suatu tempat, tetapi tidak semua tempat memiliki data terkait waktu ini. Missing values pada kolom ini bisa terjadi jika informasi waktu tidak tercatat atau tidak tersedia untuk beberapa tempat wisata.
+  - **Unnamed: 11**: Kolom ini memiliki 437 nilai hilang. Kolom dengan nama yang tidak informatif ini kemungkinan besar tidak relevan atau tidak mengandung informasi yang penting.
+  - **City**, **Price**, **Coordinate**: Kolom-kolom ini memiliki nilai hilang di dataset `tourism_rating`, yang berarti ada entri yang tidak memiliki informasi terkait kota, harga, atau koordinat geografis.
+
+### **`tourism_rating`**
+- **Tidak ada missing values**: Semua kolom dalam dataset `tourism_rating` memiliki data yang lengkap, tanpa ada missing values. Ini menunjukkan bahwa dataset ini relatif bersih dan tidak memerlukan penanganan missing values untuk analisis lebih lanjut.
+
+## 2. **Duplikasi (Data Duplikat)**
+
+Untuk menjaga integritas data, dilakukan pemeriksaan terhadap duplikasi pada atribut `Place_Name`.
+
+```python
+if recommendation_data['Place_Name'].duplicated().any():
+```
+
+**Hasil:**  
+Tidak ditemukan data duplikasi
+
+Dalam dataset ini, **tidak ditemukan data duplikasi**. Ini berarti bahwa setiap entri dalam dataset unik dan tidak ada baris yang terduplikasi. Hal ini sangat baik karena data yang tidak terduplikasi akan menghasilkan analisis yang lebih akurat dan tidak bias.
+
+## 3. **Kolom yang Tidak Relevan atau Tidak Jelas**
+
+Beberapa kolom dalam dataset mungkin tidak memberikan informasi yang berguna atau memiliki nama yang tidak jelas, sehingga perlu dianalisis lebih lanjut untuk menentukan apakah kolom-kolom tersebut relevan untuk analisis lebih lanjut.
+
+### **Kolom `Unnamed: 11` dan `Unnamed: 12`**
+- **Unnamed: 11**: Kolom ini memiliki 437 nilai hilang, yang menunjukkan bahwa sebagian besar data pada kolom ini tidak tersedia. Nama kolom yang tidak informatif juga mengindikasikan bahwa kolom ini kemungkinan besar tidak relevan untuk analisis lebih lanjut.
+- **Unnamed: 12**: Meskipun tidak ada missing values, penamaan kolom yang tidak jelas ini bisa menunjukkan bahwa kolom ini tidak berisi informasi yang berguna. Sebaiknya, kolom ini diperiksa lebih lanjut untuk memastikan relevansinya dalam analisis.
 
 
-### 2. Penghapusan Kolom dalam Dataset
+
+# Data Preparation
+Pada tahap **data preparation**, dilakukan serangkaian langkah untuk memastikan bahwa data yang digunakan dalam proses pemodelan bersih, terstruktur, dan siap untuk dianalisis. Tahapan ini mencakup pembersihan data, penggabungan dataset, pengolahan teks, encoding variabel kategorikal, normalisasi rating, dan pembagian data menjadi set pelatihan dan pengujian. Berikut adalah uraian mendetail mengenai setiap langkah yang dilakukan:
+## Langkah-langkah yang Dilakukan:
+
+### 1. Penghapusan Kolom dalam Dataset
 
 Setelah dilakukan penghapusan kolom, dataset **`tourism_with_id`** hanya menyisakan lima kolom, yaitu:
 - **Place_Id**: ID unik untuk setiap tempat wisata.
@@ -149,11 +184,11 @@ Beberapa kolom dihapus dari dataset untuk alasan-alasan berikut:
 
 Penghapusan kolom-kolom ini bertujuan untuk menyederhanakan dataset dan menghilangkan data yang tidak relevan atau tidak lengkap. Dengan demikian, dataset yang tersisa menjadi lebih efisien dan fokus pada kolom-kolom yang lebih relevan untuk analisis dan pemodelan.
 
-### 3. Data Rekomendasi Setelah Penggabungan (Train Data)
+### 2. Data Rekomendasi Setelah Penggabungan (Train Data)
 
 Dataset ini merupakan data rekomendasi tempat wisata yang telah digabungkan dari dua sumber yaitu **tourism_with_id** dan **tourism_rating**. Data ini digunakan untuk memberikan rekomendasi tempat wisata berdasarkan rating dan kategori tempat wisata.
 
-### 4. Struktur Data
+### 3. Struktur Data
 
 Setelah penggabungan, dataset memiliki kolom-kolom sebagai berikut:
 
@@ -166,7 +201,7 @@ Setelah penggabungan, dataset memiliki kolom-kolom sebagai berikut:
 | **Category**    | Kategori atau jenis tempat wisata, seperti "Budaya", "Taman Hiburan", "Pantai", dll.                  |
 | **Rating**      | Rating atau penilaian tempat wisata menurut sistem tertentu (misalnya rating bintang yang diberikan oleh pengguna). |
 
-### 5. Contoh Data
+### 4. Contoh Data
 
 Berikut adalah contoh data rekomendasi setelah penggabungan:
 
@@ -178,7 +213,7 @@ Berikut adalah contoh data rekomendasi setelah penggabungan:
 | 4            | 2.857143          | Taman Mini Indonesia Indah (TMII)      | Taman Mini Indonesia Indah merupakan suatu kawasan wisata budaya yang memperkenalkan...         | Taman Hiburan     | 4.5        |
 | 5            | 3.520000          | Atlantis Water Adventure               | Atlantis Water Adventure atau dikenal dengan Atlantis adalah taman rekreasi air yang terletak... | Taman Hiburan     | 4.5        |
 
-### 6. Penjelasan Kolom
+### 5. Penjelasan Kolom
 - **Place_Id**: ID unik untuk setiap tempat wisata yang memudahkan identifikasi tempat.
 - **Place_Ratings**: Rating rata-rata yang dihitung berdasarkan ulasan dari pengunjung tempat wisata.
 - **Place_Name**: Nama tempat wisata yang terdaftar dalam dataset.
@@ -186,7 +221,7 @@ Berikut adalah contoh data rekomendasi setelah penggabungan:
 - **Category**: Kategori tempat wisata, yang menggambarkan jenis atau kategori tempat (misalnya Budaya, Taman Hiburan, dll).
 - **Rating**: Penilaian atau rating bintang yang diberikan oleh pengguna atau sistem berdasarkan kualitas tempat wisata.
 
-### 7. Penggunaan Data
+### 6. Penggunaan Data
 Dataset ini digunakan untuk merekomendasikan tempat wisata berdasarkan rating dan kategori. Data ini dapat digunakan dalam berbagai aplikasi atau analisis untuk memberikan rekomendasi kepada pengunjung berdasarkan tempat wisata dengan rating terbaik dalam kategori yang relevan.
 
 ---
@@ -202,16 +237,6 @@ recommendation_data['Category'] = recommendation_data['Category'].fillna('')
 **Alasan:**  
 Mengisi nilai yang hilang dengan string kosong memungkinkan proses preprocessing teks berjalan lancar tanpa mengganggu analisis selanjutnya.
 
-### Pemeriksaan Duplikasi Data
-
-Untuk menjaga integritas data, dilakukan pemeriksaan terhadap duplikasi pada atribut `Place_Name`.
-
-```python
-if recommendation_data['Place_Name'].duplicated().any():
-```
-
-**Hasil:**  
-Tidak ditemukan data duplikasi
 
 ### Preprocessing Data untuk Content-based Filtering
 
@@ -268,25 +293,6 @@ Setelah pembersihan teks, teks diubah menjadi representasi numerik menggunakan `
 
 **Alasan:**  
 **TF-IDF Vectorizer** dapat mengubah teks menjadi vektor numerik yang memungkinkan pengukuran kesamaan antar destinasi menggunakan metrik cosine similarity.
-
-**d. Menghitung Cosine Similarity**
-
-Untuk mengukur kesamaan antar destinasi wisata, dihitung cosine similarity berdasarkan vektor TF-IDF yang telah dibuat.
-
-1. **Similarity Berdasarkan Tags:**
-
-   ```python
-   similarity_tags = cosine_similarity(vectors_tags, dense_output=False)
-   ```
-
-2. **Similarity Berdasarkan Description:**
-
-   ```python
-   similarity_desc = cosine_similarity(vectors_desc, dense_output=False)
-   ```
-
-**Alasan:**  
-Metrik ini efektif untuk mengukur kesamaan antar dokumen teks, sehingga cocok untuk sistem rekomendasi berbasis konten.
 
 ### Persiapan Data untuk Collaborative Filtering
 
@@ -420,6 +426,87 @@ Sebagai contoh, kami melakukan rekomendasi untuk destinasi wisata **'Wisata Alam
 | Dapat memberikan rekomendasi yang spesifik berdasarkan preferensi konten.  | Memerlukan data deskripsi dan kategori yang cukup banyak dan berkualitas.      |
 | Tidak memerlukan data interaksi pengguna (*rating*).                         | Rekomendasi terbatas pada konten yang sudah ada dalam dataset.         |
 | Cocok untuk pengguna baru (*cold start*) yang belum memiliki interaksi.       | Rentan terhadap overfitting jika data konten tidak bervariasi.          |
+
+# Penjelasan Fungsi `get_content_based_recommendations`
+
+Fungsi `get_content_based_recommendations` digunakan untuk memberikan rekomendasi destinasi wisata menggunakan metode **Content-Based Filtering**. Metode ini memberikan rekomendasi berdasarkan kesamaan antara destinasi yang diminta dengan destinasi lainnya dalam dataset. Kesamaan antar destinasi dihitung menggunakan **Cosine Similarity** yang dihasilkan dari matriks **similarity**.
+
+## Apa itu **Cosine Similarity**?
+
+**Cosine Similarity** adalah metrik yang digunakan untuk mengukur seberapa mirip dua vektor dalam ruang vektor. Metrik ini mengukur sudut antara dua vektor, dengan nilai similarity yang dihitung berdasarkan seberapa besar kedekatan arah vektor-vektor tersebut. Cosine similarity memiliki rentang nilai antara -1 dan 1, dimana:
+- **1** berarti kedua vektor sangat mirip dan sejajar.
+- **0** berarti kedua vektor tidak memiliki kesamaan.
+- **-1** berarti kedua vektor berlawanan arah.
+
+Secara matematis, **Cosine Similarity** dihitung menggunakan rumus berikut:
+
+Cosine Similarity dihitung menggunakan rumus berikut:
+
+$$
+\text{Cosine Similarity} = \frac{A \cdot B}{\|A\| \|B\|}
+$$
+
+Dimana:
+- \( A \cdot B \) adalah hasil **produk skalar** (inner product) antara dua vektor \( A \) dan \( B \). Ini dihitung dengan menjumlahkan hasil perkalian elemen-elemen yang sesuai dari kedua vektor:
+
+$$ 
+A \cdot B = A_1 B_1 + A_2 B_2 + \cdots + A_n B_n
+$$
+
+  Dimana \( A_i \) dan \( B_i \) adalah elemen ke-i dari vektor \( A \) dan \( B \).
+
+- \( \|A\| \) dan \( \|B\| \) adalah **norma** atau panjang vektor \( A \) dan \( B \), yang dihitung dengan rumus:
+
+$$ 
+\|A\| = \sqrt{A_1^2 + A_2^2 + \cdots + A_n^2}
+$$
+
+  Begitu juga untuk vektor \( B \):
+
+$$ 
+\|B\| = \sqrt{B_1^2 + B_2^2 + \cdots + B_n^2}
+$$
+
+Dalam konteks sistem rekomendasi destinasi wisata, vektor yang dibandingkan adalah representasi fitur dari setiap destinasi, seperti deskripsi atau tag yang dimiliki oleh destinasi tersebut. Vektor-vektor ini dihasilkan melalui representasi numerik, seperti menggunakan **TF-IDF** (Term Frequency-Inverse Document Frequency).
+
+### Mengapa Cosine Similarity Digunakan dalam kode ini?
+
+Cosine similarity digunakan dalam fungsi `get_content_based_recommendations` untuk mengukur kesamaan antara destinasi wisata berdasarkan representasi numerik mereka (misalnya, deskripsi dan tag). Fungsi ini memanfaatkan matriks similarity yang sudah dihitung sebelumnya untuk menentukan destinasi mana yang paling mirip dengan destinasi yang diminta oleh pengguna. Berikut adalah langkah-langkah yang dilakukan oleh fungsi ini:
+
+1. **Input**: Pengguna memberikan nama destinasi wisata (`place_name`), dan sistem akan mencari destinasi lain yang paling mirip dengan destinasi tersebut.
+2. **Matriks Similarity**: Matriks similarity (`similarity_matrix`) adalah hasil perhitungan cosine similarity antara destinasi-destinasi dalam dataset. Matriks ini menyimpan skor kesamaan antara setiap pasangan destinasi wisata.
+3. **Mencari Destinasi yang Mirip**: Setelah menemukan destinasi yang diminta (`place_name`), fungsi ini mengambil skor similarity antara destinasi tersebut dan destinasi lainnya.
+4. **Mengurutkan dan Memberikan Rekomendasi**: Fungsi kemudian mengurutkan destinasi lainnya berdasarkan skor similarity, dan memberikan rekomendasi top-N destinasi yang paling mirip.
+
+## Penjelasan Kode
+
+```python
+def get_content_based_recommendations(place_name, data, similarity_matrix, top_n=10):
+    # Memastikan place_name ada dalam data
+    if place_name not in data['Place_Name'].values:
+        print(f"'{place_name}' TIDAK ditemukan dalam dataset.")
+        return []
+
+    # Mendapatkan indeks destinasi yang diminta dalam dataset
+    place_idx = data[data['Place_Name'] == place_name].index[0]
+
+    # Mendapatkan skor similarity untuk destinasi tersebut (dari matriks similarity)
+    place_similarity = similarity_matrix[place_idx].toarray().flatten()
+
+    # Mengurutkan destinasi berdasarkan similarity score secara menurun
+    similar_indices = place_similarity.argsort()[::-1]
+
+    # Menghindari rekomendasi diri sendiri
+    similar_indices = similar_indices[similar_indices != place_idx]
+
+    # Mendapatkan top-n rekomendasi
+    top_indices = similar_indices[:top_n]
+
+    # Mendapatkan daftar Place_Id dari destinasi yang direkomendasikan berdasarkan indeks yang terpilih
+    recommended_place_ids = data.iloc[top_indices]['Place_Id'].tolist()
+
+    return recommended_place_ids
+
 
 ### 2. Collaborative Filtering
 
